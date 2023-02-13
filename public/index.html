@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Customers</title>
+</head>
+
+<body style="margin-left: 20%;">
+
+    <h1>Tuotteemme</h1>
+
+    <div id="sisältö"></div>
+    
+<script>
+
+document.getElementById("sisältö").innerHTML = "<h4>Ladataan...</h4>"
+
+let x = "<table><thead><th>Herkun nimi</th><th>tuotekoodi</th></thead><tbody>"
+
+
+fetch('http://localhost:3300/api/herkut')
+  .then(jsonResponse => jsonResponse.json()) // muutetaan json data javascript muotoon
+  .then(oliot => oliot.map(c => { // loopataan läpi oliot
+    x += `<tr><td>${c.name}</td><td>${c.id}</td></tr>`
+   
+    }
+  ))
+
+  setTimeout(() => {
+    x += `</tbody></table>`
+  document.getElementById("sisältö").innerHTML = x}
+  , 500 )
+
+
+</script>
+
+</body>
+
+
+</html>
