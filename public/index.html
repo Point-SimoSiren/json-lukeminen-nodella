@@ -3,16 +3,36 @@
 <html>
 
 <head>
-    <title>Customers</title>
+    <title>Herkut</title>
+    <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body style="margin-left: 20%;">
 
-    <h1>Tuotteemme</h1>
+  <div id="pin-div">
+    <input id="pin" placeholder="pin code" type="password" />
+    <button onclick="checkPin()">login</button>
+  </div>
 
-    <div id="sisältö"></div>
+    <h1 class="hidden">Tuotteemme</h1>
+
+    <div class="hidden" id="sisältö"></div>
     
 <script>
+
+  function checkPin() {
+    var pin = document.getElementById("pin").value
+    var hiddenElements = document.getElementsByClassName("hidden")
+
+    if(pin == "1010") {
+     for (i=0; i < hiddenElements.length; i++){
+      hiddenElements[i].style.visibility = "visible"
+     }
+     document.getElementById("pin-div").style.visibility = "hidden"
+    }
+    
+  }
+
 
 document.getElementById("sisältö").innerHTML = "<h4>Ladataan...</h4>"
 
