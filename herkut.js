@@ -1,5 +1,6 @@
 const path = require('path')
 const express = require('express')
+const fs = require('fs').promises
 
 const app = express()
 
@@ -10,6 +11,20 @@ app.get('/api/herkut', (req, res) => {
     res.json(namit)
     })
 
+
+ // Pinkoodin lukeminen txt tiedostosta pelvelimelta ja lähettäminen selaimelle   
+app.get('/api/getpin', async (req, res) => {
+try {
+    // Read the content of the text file
+    const savedPin = await fs.readFile('./pin.txt', 'utf-8')
+    
+    // Send the file content as the response
+    res.send(savedPin)
+} catch (error) {
+    console.error('Error reading file:', error)
+    res.status(500).send('Internal Server Error')
+}
+})
 
 // Tehdään polkumääritys public kansioon 
 const polku = path.join(__dirname, './public')

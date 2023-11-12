@@ -20,38 +20,52 @@
     
 <script>
 
-  function checkPin() {
+  async function checkPin() {
     var pin = document.getElementById("pin").value
-    var hiddenElements = document.getElementsByClassName("hidden")
+    const response = await fetch("https://localhost:3300/api/getpin")
+    const correctPin = await response.json()
+    // debuggaus
+    console.log(pin)
+    console.log(correctPin)
 
-    if(pin == "1010") {
+    if (pin == correctPin) {
+    var hiddenElements = document.getElementsByClassName("hidden")
+    if(pin == correctPin) {
      for (i=0; i < hiddenElements.length; i++){
       hiddenElements[i].style.visibility = "visible"
      }
-     document.getElementById("pin-div").style.visibility = "hidden"
+       document.getElementById("pin-div").style.visibility = "hidden"
+     }
     }
-    
+  }
+  // Funktio joka luo taulukon ja hakee datan sijoittaen silmukassa
+  // taulukkorivit vastaanotetusta datasta. Lopuksi taulukko päätetään ja renderöidään
+  async function fetchData() {
+    document.getElementById("sisältö").innerHTML = "<h4>Ladataan...</h4>"
+
+    var x = `<table><thead><th>Herkun nimi</th><th>tuotekoodi</th></thead><tbody>`
+
+    try {
+        const response = await fetch("http://localhost:3300/api/herkut")
+
+        const herkkudata = await response.json() // muutetaan json => javascript muotoon
+
+        await herkkudata.map(h => { // loopataan läpi oliot map funktiolla, h on 1 herkkuolio
+        x += `<tr><td>${h.name}</td><td>${h.id}</td></tr>`
+        })
+
+        // taulukko päätetään ja renderöidään html elementtin
+        x += `</tbody></table>`
+        document.getElementById("sisältö").innerHTML = x
+        
+        // Virhetilanteen hallinta
+    } catch (error) {
+         console.error("Error fetching data:", error);
+        }
   }
 
-
-document.getElementById("sisältö").innerHTML = "<h4>Ladataan...</h4>"
-
-let x = "<table><thead><th>Herkun nimi</th><th>tuotekoodi</th></thead><tbody>"
-
-
-fetch('http://localhost:3300/api/herkut')
-  .then(jsonResponse => jsonResponse.json()) // muutetaan json data javascript muotoon
-  .then(oliot => oliot.map(c => { // loopataan läpi oliot
-    x += `<tr><td>${c.name}</td><td>${c.id}</td></tr>`
-   
-    }
-  ))
-
-  setTimeout(() => {
-    x += `</tbody></table>`
-  document.getElementById("sisältö").innerHTML = x}
-  , 500 )
-
+  // Funktion kutsuminen
+  fetchData()
 
 </script>
 
